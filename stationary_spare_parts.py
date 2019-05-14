@@ -87,14 +87,17 @@ def prob_sparepart_not_available(lambda_2,lambda_1,mu,M,N):
 #print(prob_sparepart_not_available(lambda_2, lambda_1,mu,M,N))
 # check the dependence of this probability on the parameters N,M,mu, 
 # others we can't change but we can consider case 1: low lambda_1, case 2: high lambda_1 et
+mu_vals = [0.3,0.4,0.5]
 N_vals = [x for x in range(5, 50, 4)]
-results = []
-results_log = []
+results = [[] for x in range(len(mu_vals)) ]
+results_log = [[] for x in range(len(mu_vals)) ]
 #mu_vals = [x/100 for x in range(40,100,5)]	
-for N in N_vals:
-	res = prob_sparepart_not_available(lambda_2, lambda_1,mu,M,N)
-	results_log.append(math.log(res,10))
-	results.append(res)
+for i in range(len(mu_vals)):
+	for N in N_vals:
+		mu = mu_vals[i]
+		res = prob_sparepart_not_available(lambda_2, lambda_1,mu,M,N)
+		results_log[i].append(math.log(res,10))
+		results[i].append(res)
 #prob_mat = np.zeros((len(N_vals),len(mu_vals)))
 #for i in range(len(N_vals)):
 #	for j in range(len(mu_vals)):
@@ -102,14 +105,25 @@ for N in N_vals:
 
 #ax = sns.heatmap(prob_mat)
 plt.figure(1)
-plt.plot(N_vals,results_log)
+fig, ax = plt.subplots()
+plt.plot(N_vals, results_log[0], 'b-', label = 'mu = 0.3' )
+plt.plot(N_vals, results_log[1], 'b--', label = 'mu = 0.4' )
+plt.plot(N_vals, results_log[2], 'b-.', label = 'mu = 0.5' )
 plt.xlabel('Starting inventory (N)')
 plt.ylabel('log( Prob spare part not available )')
+legend = ax.legend(loc='upper right', shadow=True, fontsize='x-small')
+legend.get_frame().set_facecolor('#00FFCC')
+plt.tight_layout()
 plt.savefig("C:/Users/sapoorv/Downloads/CODE/python/SP management/prob_NA_N_log.png")
 
 plt.figure(2)
-plt.plot(N_vals,results)
+fig, ax = plt.subplots()
+plt.plot(N_vals,results[0], 'b-', label = 'mu = 0.3')
+plt.plot(N_vals,results[1], 'b--', label = 'mu = 0.4')
+plt.plot(N_vals,results[2], 'b-.', label = 'mu = 0.5')
 plt.xlabel('Starting inventory (N)')
 plt.ylabel('Prob spare part not available')
+legend = ax.legend(loc='upper right', shadow=True, fontsize='x-small')
+legend.get_frame().set_facecolor('#00FFCC')
+plt.tight_layout()
 plt.savefig("C:/Users/sapoorv/Downloads/CODE/python/SP management/prob_NA_N.png")
-"# spare_parts" 
